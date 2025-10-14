@@ -162,7 +162,7 @@ public class NativeView implements PlatformView, MethodCallHandler {
             }
         });
         try {
-            cameraHelper.startCamera(activity, CameraHelper.CameraFacing.FRONT, null,
+            cameraHelper.startCamera(activity, CameraHelper.CameraFacing.BACK, null,
                     cameraTargetResolution());
         } catch (Exception e) {
             Log.e(TAG, "Error has occuer at camera start: " + e);
