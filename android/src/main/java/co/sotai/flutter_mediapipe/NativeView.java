@@ -85,9 +85,19 @@ public class NativeView implements PlatformView, MethodCallHandler {
     // For event channel
     private final Handler handler = new Handler(Looper.getMainLooper());
 
+    private String cameraFacing = "front"; // default
+
     NativeView(@NonNull Context context, int id, @Nullable Map<String, Object> creationParams,
-               BinaryMessenger messenger, Activity activity) {
+            BinaryMessenger messenger, Activity activity) {
         this.activity = activity;
+
+        if (creationParams != null && creationParams.containsKey("cameraFacing")) {
+            Object facing = creationParams.get("cameraFacing");
+            if (facing != null) {
+                cameraFacing = facing.toString().toLowerCase();
+            }
+        }
+
         try {
             applicationInfo = activity.getPackageManager()
                     .getApplicationInfo(activity.getPackageName(), PackageManager.GET_META_DATA);
@@ -102,6 +112,8 @@ public class NativeView implements PlatformView, MethodCallHandler {
         PermissionHelper.checkAndRequestCameraPermissions(activity);
         onResume();
     }
+
+    
 
     private void setupProcess(Activity activity) {
         eglManager = new EglManager(null);
@@ -162,8 +174,12 @@ public class NativeView implements PlatformView, MethodCallHandler {
             }
         });
         try {
-            cameraHelper.startCamera(activity, CameraHelper.CameraFacing.BACK, null,
-                    cameraTargetResolution());
+            CameraHelper.CameraFacing facing = cameraFacing.equals("back")
+        ? CameraHelper.CameraFacing.BACK
+        : CameraHelper.CameraFacing.FRONT;
+
+cameraHelper.startCamera(activity, facing, null, cameraTargetResolution());
+
         } catch (Exception e) {
             Log.e(TAG, "Error has occuer at camera start: " + e);
         }
