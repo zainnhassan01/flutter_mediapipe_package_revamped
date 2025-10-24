@@ -29,17 +29,26 @@ const NAMESPACE = "plugins.sotai.co/flutter_mediapipe";
 typedef void NativeViewCreatedCallback(FlutterMediapipe controller);
 
 class NativeView extends StatelessWidget {
-  const NativeView({required this.onViewCreated});
+  const NativeView({
+    required this.onViewCreated,
+    this.cameraFacing = "front", // default
+  });
 
   final NativeViewCreatedCallback onViewCreated;
+  final String cameraFacing;
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic> creationParams = {
+      'cameraFacing': cameraFacing,
+    };
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return AndroidView(
           viewType: "flutter_mediapipe/view",
           onPlatformViewCreated: (int id) => onViewCreated(FlutterMediapipe()),
+          creationParams: creationParams,
+          creationParamsCodec: const StandardMessageCodec(),
         );
       case TargetPlatform.fuchsia:
       case TargetPlatform.iOS:
