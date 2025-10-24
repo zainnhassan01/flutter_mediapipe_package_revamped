@@ -1,3 +1,4 @@
+
 package co.sotai.flutter_mediapipe;
 
 import android.app.Activity;
@@ -41,6 +42,7 @@ public class NativeViewFactory extends PlatformViewFactory {
     nativeView = new NativeView(context, id, creationParams, messenger, activity);
     return nativeView;
   }
+
 
   public NativeView getNativeView(){
     return nativeView;
