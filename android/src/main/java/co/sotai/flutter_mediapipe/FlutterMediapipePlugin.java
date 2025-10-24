@@ -79,4 +79,3 @@ public class FlutterMediapipePlugin implements FlutterPlugin, ActivityAware {
     }
 
 }
-
